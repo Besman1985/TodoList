@@ -46,38 +46,27 @@
             <div class="time-line">
                 <span class="time-label">8 am</span>
             </div>
-
             <div class="time-line">
                 <span class="time-label">9 am</span>
             </div>
             <div class="time-line">
                 <span class="time-label">10 am</span>
-                <div class="event-card team-meeting">
-                    <span class="event-title">Командная встреча</span>
-                    <span class="event-details">(Фронтенд и Бэкенд)</span>
-                    <span class="event-time">9:20 am - 11:15 am</span>
-                    <div class="event-participants">
-                        <img src="path/to/user1.png" alt="Участник 1">
-                        <img src="path/to/user2.png" alt="Участник 2">
-                        <img src="path/to/user3.png" alt="Участник 3">
-                        <div class="more-users">+2</div>
-                    </div>
-                </div>
+           
             </div>
             <div class="time-line">
                 <span class="time-label">11 am</span>
             </div>
+
+
+
             <div class="time-line current-time">
                 <span class="time-label">11:30</span>
                 <div class="current-time-indicator"></div>
             </div>
-            <div class="time-line">
-                <span class="time-label">12 am</span>
-                <div class="event-card call-nikita">
-                    <span class="event-title">Позвонить Никите</span>
-                    <span class="event-details">по поводу покупки машины</span>
-                    <span class="event-time">12:10 am - 12:30 am</span>
-                </div>
+
+
+
+            <div class="time-line">      
             </div>
             <div class="time-line">
                 <span class="time-label">1 pm</span>
@@ -119,18 +108,18 @@
                 <div class="modal__content">
                     <form action="#">
                         <div class="modal__close">&times;</div>
-                        <div class="modal__title">Что предстоит сделать</div>
+                        <div class="modal__title">Добавить задачу</div>
                         <input required placeholder="Дата" name="date" type="date" class="modal__input">
-                        <input required placeholder="Заголовок" name="item" type="text" class="modal__input">
-                        <textarea required placeholder="Содержание" name="content" type="text" class="modal__cont"></textarea>
+                        <input required placeholder="Название" name="item" type="text" class="modal__input">
+                        <textarea class="modal__input" required placeholder="Что нужно сделать..." name="content" type="text" class="modal__cont"></textarea>
 
-                        <button class="btn btn_dark btn_min">Добавить событие</button>
+                        <button class="btn btn_dark btn_min">Создать</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script src="/script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

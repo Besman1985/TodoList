@@ -102,11 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     const formObj = {};
     let formData = new FormData(form);
-    formData.forEach((item,index) => {
-      formObj[index] = item;
-
+    formData.forEach((item, index) => {
+        formObj[index] = item;
     });
-   localStorage.setItem(Date.now(), JSON.stringify(formObj) );
+    localStorage.setItem(formObj.date, JSON.stringify(formObj));
     modal.style.display = "none";
     form.reset();
 

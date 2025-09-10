@@ -9,10 +9,11 @@ body {
     min-height: 100vh;
 }
 
+
 .calendar-app {
-    width: 100%;
+    width: 375px;
     /* Ширина мобильного устройства */
-    height: auto;
+    height: 812px;
     /* Высота мобильного устройства */
     background-color: #121422;
     border-radius: 40px;
@@ -174,6 +175,7 @@ body {
     position: relative;
     overflow: hidden;
     margin-top: 5px;
+    cursor: pointer;
 }
 
 .event-card::before {
@@ -187,14 +189,17 @@ body {
 
 .training::before {
     background-color: #f7a02c;
+
 }
 
 .team-meeting::before {
     background-color: #e91e63;
+
 }
 
 .call-nikita::before {
     background-color: #4caf50;
+
 }
 
 .event-title {
@@ -261,7 +266,7 @@ body {
 .current-time-indicator {
     position: absolute;
     left: 45px;
-    width: 98%;
+    width: 90%;
     height: 2px;
     background-color: #4da6ff;
     border-radius: 1px;
@@ -329,7 +334,7 @@ body {
 
 
 .modal {
-    
+
     position: fixed;
     top: 0;
     left: 0;
@@ -342,14 +347,14 @@ body {
 }
 
 .modal__dialog {
-    
-    max-width: 500px;
+
+    max-width: 355px;
     margin: 40px auto
 }
 
 .modal__content {
     position: relative;
-    width: 100%;
+    width: 275px;
     padding: 40px;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, .2);
@@ -359,8 +364,9 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     background-color: #2b2b2b;
 }
+
 .modal__cont {
-     display: block;
+    display: block;
     margin: 20px auto 20px auto;
     max-width: 280px;
     min-width: 280px;
@@ -370,10 +376,11 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, .2);
     border: none;
     font-size: 18px;
-    text-align:start;
+    text-align: start;
     padding: 0 20px;
     outline: 0
 }
+
 .modal__close {
     position: absolute;
     top: 8px;
@@ -396,7 +403,7 @@ body {
 .modal__input {
     display: block;
     margin: 20px auto 20px auto;
-    width: 280px;
+    width: 175px;
     height: 50px;
     background: #fff;
     box-shadow: 0 4px 15px rgba(0, 0, 0, .2);
@@ -409,6 +416,6 @@ body {
 
 .modal .btn {
     display: block;
-    width: 280px;
+    width: 175px;
     margin: 0 auto
 }
