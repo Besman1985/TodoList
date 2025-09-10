@@ -37,11 +37,7 @@
         <main class="events-container">
             <div class="time-line">
                 <span class="time-label">7 am</span>
-                <div class="event-card training">
-                    <span class="event-title">Утренняя тренировка</span>
-                    <span class="event-details">с Анной</span>
-                    <span class="event-time">7:00 am - 8:30 am</span>
-                </div>
+                <div class="event"></div>
             </div>
             <div class="time-line">
                 <span class="time-label">8 am</span>
@@ -59,10 +55,10 @@
 
 
 
-            <div class="time-line current-time">
+            <!-- <div class="time-line current-time">
                 <span class="time-label">11:30</span>
                 <div class="current-time-indicator"></div>
-            </div>
+            </div> -->
 
 
 
@@ -110,6 +106,7 @@
                         <div class="modal__close">&times;</div>
                         <div class="modal__title">Добавить задачу</div>
                         <input required placeholder="Дата" name="date" type="date" class="modal__input">
+                        <input required placeholder="Дата" name="time" type="time" class="modal__input">
                         <input required placeholder="Название" name="item" type="text" class="modal__input">
                         <textarea class="modal__input" required placeholder="Что нужно сделать..." name="content" type="text" class="modal__cont"></textarea>
 
