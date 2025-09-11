@@ -37,20 +37,8 @@ body {
     margin-bottom: 20px;
 }
 
-.icon-button {
-    background: transparent;
-    border: none;
-    color: #e0e0e0;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 50%;
-    transition: background-color 0.3s;
-}
 
-.icon-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
+
 
 .date-display {
     text-align: center;
@@ -104,31 +92,36 @@ body {
 }
 
 .btnPrev {
+    cursor: pointer;
+    height: 25px;
+    width: 100px;
+    border-radius:10px;
     background-color: #4da6ff;
-    margin-left: 48%;
+    
 
 }
 
 .btnNext {
+    cursor: pointer;
+    height: 25px;
+    width: 100px;
+    border-radius:10px;
     background-color: #4da6ff;
-    margin-left: 2%;
+}
+
+
+.arrow-down-container {
+    justify-content: space-between;
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: -20px;
+    
 }
 
 .day-number {
     font-size: 20px;
     font-weight: 600;
-}
-
-.arrow-down-container {
-    text-align: center;
-    cursor: pointer;
-}
-
-.arrow-down-container img {
-    width: 20px;
-    height: 20px;
-    filter: invert(1);
-    opacity: 0.5;
 }
 
 .events-container {
@@ -225,31 +218,6 @@ body {
     margin-top: 10px;
 }
 
-.event-participants img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 2px solid #1a1c2c;
-    margin-left: -5px;
-    transition: transform 0.2s;
-}
-
-.event-participants img:first-child {
-    margin-left: 0;
-}
-
-.more-users {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background-color: #2a2d42;
-    color: #e0e0e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 12px;
-    margin-left: -5px;
-}
 
 .current-time {
     display: flex;
@@ -266,7 +234,7 @@ body {
 .current-time-indicator {
     position: absolute;
     left: 45px;
-    width: 90%;
+    width: 375px;
     height: 2px;
     background-color: #4da6ff;
     border-radius: 1px;
@@ -366,6 +334,7 @@ body {
 }
 
 .modal__cont {
+
     display: block;
     margin: 20px auto 20px auto;
     max-width: 280px;
@@ -401,20 +370,29 @@ body {
 }
 
 .modal__input {
+    
     display: block;
     margin: 20px auto 20px auto;
     width: 175px;
     height: 50px;
-    background: #fff;
+    background-color: #2b6cb0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, .2);
     border: none;
     font-size: 18px;
+    font: black;
     text-align: center;
     padding: 0 20px;
-    outline: 0
+    outline: 0;
+    border-radius: 10px;
+}
+
+.modal__input::placeholder{
+    color: #000;
 }
 
 .modal .btn {
+    font: black;
+    background-color: #2b6cb0;
     display: block;
     width: 175px;
     margin: 0 auto
