@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById("add-button");
   const modal = document.querySelector(".modal");
   const btnClose = document.querySelector(".modal__close");
+  const parentDiv = document.querySelector(".event");
 
 
   form.addEventListener('submit', event => {
@@ -103,13 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const formObj = {};
     let formData = new FormData(form);
     formData.forEach((item, index) => {
-        formObj[index] = item;
+      formObj[index] = item;
     });
-    localStorage.setItem(formObj.date, JSON.stringify(formObj));
+    localStorage.setItem(Date.now(), JSON.stringify(formObj));
     modal.style.display = "none";
+    parentDiv.innerHTML = "";
+    getLocalDB()
     form.reset();
-
-
   });
 
   addBtn.addEventListener("click", () => {
@@ -119,9 +120,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  class Todo {
+    constructor(id, date, time, item, content) {
+      this.id = id
+      this.date = date
+      this.time = time
+      this.item = item
+      this.content = content
+
+    }
+
+    rederToDo() {
+      const event = document.createElement(`div`);
+      event.id = `${this.id}`;
+      event.classList.add("event-card", "training");
+      event.innerHTML = `<span class="event-title">${this.item}</span>
+                    <span class="event-details">${this.content}</span>
+                    <span class="event-time">${this.time}</span>
+                    `;
+
+      parentDiv.append(event)
+      console.log(this.id);
 
 
+    }
 
+  };
+
+
+  function getLocalDB() {
+    const localObj = Object.keys(localStorage);
+    for (it of localObj) {
+      let n = JSON.parse(localStorage.getItem(it));
+      let { data, item, content, time } = n;
+      const newEvent = new Todo(it, data, time, item, content);
+      newEvent.rederToDo();
+      console.log(it);
+    }
+
+  };
+
+  getLocalDB();
 
 
 
