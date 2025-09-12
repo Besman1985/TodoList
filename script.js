@@ -2,8 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-
-  const calendarWeek = document.querySelector('.week-days');
+function ToDoList () {
+ const calendarWeek = document.querySelector('.week-days');
   const currentMonthYearHeader = document.querySelector('.date-text');
   const prevWeekBtn = document.getElementById('prev-week-btn');
   const nextWeekBtn = document.getElementById('next-week-btn');
@@ -249,6 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+};
+ 
+ToDoList()
 
 
 
