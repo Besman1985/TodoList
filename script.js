@@ -106,12 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement("div");
       div.classList.add("time-line");
       if (i >= 24) {
+        div.id = addZerro(i - 24);
         div.innerHTML = ` <span class="time-label">${addZerro(i - 24)}</span>
                           <div class="event"></div>
                 `;
         parentDivTime.append(div);
         oursArr.push((i - 24));
       } else {
+        div.id = i;
         div.innerHTML = ` <span class="time-label">${i}</span>
                           <div class="event"></div>
                 `;
@@ -120,7 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     };
   }
-
+  function renderCarrentTime(hours) {
+    const timeLine = document.querySelectorAll(".time-line");
+    const div = document.createElement("div");
+    div.classList.add("time-line", "current-time");
+    div.innerHTML = ` 
+                    <span class="time-label">11:30</span>
+                    <div class="current-time-indicator"></div>
+                `;
+    timeLine.forEach(item => {
+      if (item.id == hours)
+        item.append(div);
+    });
+  };
+  renderCarrentTime(new Date().getHours());
 
   const form = document.querySelector("form");
   const addBtn = document.getElementById("add-button");
@@ -161,15 +176,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     rederToDo() {
-      const event = document.createElement(`div`);
-      event.id = `${this.id}`;
-      event.classList.add("event-card", "training");
-      event.innerHTML = `<span class="event-title">${this.item}</span>
+      const timeLine = document.querySelectorAll(".time-line");
+      const sliceTime = this.time.slice(0, 2);
+      timeLine.forEach(item => {
+        if (item.id == addZerro(+sliceTime)) {
+           console.log(item.id == addZerro(+sliceTime));
+          const event = document.createElement(`div`);
+          event.id = `${this.id}`;
+          event.classList.add("event-card", "training");
+          event.innerHTML = `<span class="event-title">${this.item}</span>
                     <span class="event-details">${this.content}</span>
                     <span class="event-time">${this.time}</span>
                     `;
 
-      parentDiv.append(event);
+          item.children[1].append(event);
+        }
+
+      })
+
+
+
     };
   };
   function getLocalDB() {
@@ -177,15 +203,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     for (let id of localObj) {
-      let n = JSON.parse(localStorage.getItem(id));
-      let { data, item, content, time } = n;
-      const newEvent = new Todo(id, data, time, item, content);
-      let t = +(time.slice(0, 2));
-      for (let i of oursArr) {
-        if (t == i) {
-          newEvent.rederToDo();
-        }
+      if (typeof (+id) == "number") {
+        let n = JSON.parse(localStorage.getItem(id));
+        let { data, item, content, time } = n;
+        const newEvent = new Todo(id, data, time, item, content);
+        let t = +(time.slice(0, 2));
+        for (let i of oursArr) {
+          if (t == i) {
+            newEvent.rederToDo();
+          }
+        };
+      } else {
+        continue
       };
+
+
+
 
     };
 
