@@ -1,9 +1,15 @@
+"use strict";
+
 document.addEventListener('DOMContentLoaded', () => {
+
+
   const calendarWeek = document.querySelector('.week-days');
   const currentMonthYearHeader = document.querySelector('.date-text');
   const prevWeekBtn = document.getElementById('prev-week-btn');
   const nextWeekBtn = document.getElementById('next-week-btn');
-
+  let oursArr = [];
+  renderModal();
+  renderTimLine(new Date().getHours());
 
   let currentDate = new Date();
 
@@ -45,9 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       calendarWeek.appendChild(dayElement);
 
-
-
-
     }
 
     const cardDays = document.querySelectorAll(".day-card");
@@ -60,9 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === item) {
           item.classList.add("active");
         }
-        console.log(item.id)
       });
-
     });
   };
 
@@ -90,6 +91,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderCalendar();
 
+  function addZerro(nam) {
+    if (nam < 10) {
+      return `0${nam}`
+    } else {
+      return nam
+    };
+  }
+
+
+  function renderTimLine(hours) {
+    const parentDivTime = document.querySelector('.events-container');
+    for (let i = (hours - 5); i <= (hours + 5); i++) {
+      const div = document.createElement("div");
+      div.classList.add("time-line");
+      if (i >= 24) {
+        div.innerHTML = ` <span class="time-label">${addZerro(i - 24)}</span>
+                          <div class="event"></div>
+                `;
+        parentDivTime.append(div);
+        oursArr.push((i - 24));
+      } else {
+        div.innerHTML = ` <span class="time-label">${i}</span>
+                          <div class="event"></div>
+                `;
+        parentDivTime.append(div);
+        oursArr.push(i)
+      };
+    };
+  }
 
 
   const form = document.querySelector("form");
@@ -109,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(Date.now(), JSON.stringify(formObj));
     modal.style.display = "none";
     parentDiv.innerHTML = "";
-    getLocalDB()
+    getLocalDB();
     form.reset();
   });
 
@@ -139,31 +169,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="event-time">${this.time}</span>
                     `;
 
-      parentDiv.append(event)
-      console.log(this.id);
-
-
-    }
-
+      parentDiv.append(event);
+    };
   };
-
-
   function getLocalDB() {
     const localObj = Object.keys(localStorage);
-    for (it of localObj) {
-      let n = JSON.parse(localStorage.getItem(it));
+
+
+    for (let id of localObj) {
+      let n = JSON.parse(localStorage.getItem(id));
       let { data, item, content, time } = n;
-      const newEvent = new Todo(it, data, time, item, content);
-      newEvent.rederToDo();
-      console.log(it);
-    }
+      const newEvent = new Todo(id, data, time, item, content);
+      let t = +(time.slice(0, 2));
+      for (let i of oursArr) {
+        if (t == i) {
+          newEvent.rederToDo();
+        }
+      };
+
+    };
 
   };
-
   getLocalDB();
 
+  function renderModal() {
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.innerHTML = `
+     <div class="modal__dialog">
+                <div class="modal__content">
+                    <form action="#">
+                        <div class="modal__close">&times;</div>
+                        <div class="modal__title">Добавить задачу</div>
+                        <input required placeholder="Дата" name="date" type="date" class="modal__input">
+                        <input required placeholder="Дата" name="time" type="time" class="modal__input">
+                        <input required placeholder="Название" name="item" type="text" class="modal__input">
+                        <textarea class="modal__input" required placeholder="Что нужно сделать..." name="content" type="text" class="modal__cont"></textarea>
 
+                        <button class="btn btn_dark btn_min">Создать</button>
+                    </form>
+                </div>
+     </div>`;
+    document.body.append(modal);
 
+  };
 
 
 
