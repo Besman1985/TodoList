@@ -395,9 +395,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // создаем класс карточек прогноза по дням
     class RenderDayCard {
-      constructor(date, avgtemp_c) {
+      constructor(date, avgtemp_c,icon) {
         this.date = date
         this.avgtemp_c = avgtemp_c
+        this.icon = icon
       }
       render() {
 
@@ -405,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
         div.classList.add("forecast-day");
         div.innerHTML = `
                 <span class="day-name">${this.date.slice(8.9)}</span>
-                <img id= "${this.date}" src="icons/weather/Gemini_Generated_Image_rf26rhrf26rhrf26-Photoroom.PNG" alt class="forecast-icon">
+                <img id= "${this.date}" src=${this.icon} alt class="forecast-icon">
                 <span class="day-temp">${this.avgtemp_c}°C</span>
   `;
         document.querySelector(".weekly-forecast").append(div);
@@ -420,7 +421,9 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let item of forecastday) {
         let { date } = item;
         let { avgtemp_c } = item.day;
-        let card = new RenderDayCard(date, avgtemp_c);
+        let {icon} = item.day.condition;
+        console.log(item);
+        let card = new RenderDayCard(date, avgtemp_c,icon);
         card.render();
       }
       // Добавляем обработчик на карточки
@@ -431,10 +434,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function getData(nam) {
       let { name } = nam.location;
       let { humidity, wind_kph, pressure_mb, temp_c, wind_dir, is_day } = nam.current;
+      let {icon} = nam.current.condition;
       // рендерим Header
       headerWeather(temp_c, name);
       // рендерим Conteiner
-      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day);
+      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day,icon);
 
     }
 
@@ -464,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     //  функция для рендера Conteiner
-    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day) {
+    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day,icon) {
 
       const wetherAPP = document.querySelector(".events-container");
       wetherAPP.innerHTML = `
@@ -486,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="weather-graphic">
-                <img src="icons/weather/Gemini_Generated_Image_cdokd2cdokd2cdok-Photoroom.PNG" alt="Облачно с солнцем">
+                <img src=${icon} alt="Облачно с солнцем">
             </div>
             <section class="weekly-forecast" 
             </section>
@@ -501,61 +505,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (id == item.date) {
           let { sunset, sunrise, moonset, moonrise } = item.astro,
             { avghumidity, avgtemp_c, maxtemp_c, maxwind_kph, mintemp_c, daily_chance_of_rain, totalprecip_mm, uv } = item.day;
-          console.log(id, sunset, sunrise, moonset, moonrise, avghumidity, avgtemp_c, maxtemp_c, maxwind_kph, mintemp_c, daily_chance_of_rain, totalprecip_mm, uv);
-        }
-
-
-
-
-
-      })
-
-
-
-      const modal = document.createElement("div");
+            
+                const modal = document.createElement("div");
       modal.classList.add("modal_weather");
       modal.innerHTML = `
       <div class="modal__dialog">
         <div class="weather-card">
           <div class="wave"></div>
           <div style="position: relative; z-index: 2;">
-            <h2>Москва</h2>
-            <p class="date">Среда, 17 сентября 2025</p>
+            <h2>Петрозаводск</h2>
+            <p class="date">${id}</p>
 
             <div class="main-temp">
-              18<span>°C</span>
+              ${avgtemp_c}<span>°C</span>
             </div>
             <p class="description">Переменная облачность</p>
 
             <div class="details-grid">
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-temperature-low"></i></div>
-                <div class="value">Мин: 12°C</div>
+                <div class="value">Мин:${mintemp_c}°C</div>
                 <div class="label">Температура</div>
               </div>
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-temperature-high"></i></div>
-                <div class="value">Макс: 21°C</div>
+                <div class="value">Макс:${maxtemp_c}°C</div>
                 <div class="label">Температура</div>
               </div>
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-wind"></i></div>
-                <div class="value">10 км/ч</div>
+                <div class="value">${maxwind_kph}км/ч</div>
                 <div class="label">Ветер</div>
               </div>
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-cloud-rain"></i></div>
-                <div class="value">30% | 5 мм</div>
+                <div class="value">${daily_chance_of_rain}% | ${totalprecip_mm} мм</div>
                 <div class="label">Осадки</div>
               </div>
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-water"></i></div>
-                <div class="value">75%</div>
+                <div class="value">${avghumidity}%</div>
                 <div class="label">Влажность</div>
               </div>
               <div class="detail-item">
                 <div class="icon"><i class="fas fa-sun"></i></div>
-                <div class="value">4 (Средний)</div>
+                <div class="value">${uv} (Средний)</div>
                 <div class="label">УФ-индекс</div>
               </div>
             </div>
@@ -563,22 +557,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="sun-moon-grid">
               <div class="sun-moon-item">
                 <div class="icon"><i class="fas fa-sun"></i></div>
-                <div class="time">06:15</div>
+                <div class="time">${sunrise}</div>
                 <div class="label">Восход</div>
               </div>
               <div class="sun-moon-item">
                 <div class="icon"><i class="fas fa-sun"></i></div>
-                <div class="time">18:45</div>
+                <div class="time">${sunset}</div>
                 <div class="label">Закат</div>
               </div>
               <div class="sun-moon-item">
                 <div class="icon"><i class="fas fa-moon"></i></div>
-                <div class="time">19:30</div>
+                <div class="time">${moonrise}</div>
                 <div class="label">Восход Луны</div>
               </div>
               <div class="sun-moon-item">
                 <div class="icon"><i class="fas fa-moon"></i></div>
-                <div class="time">05:40</div>
+                <div class="time">${moonset}</div>
                 <div class="label">Закат Луны</div>
               </div>
             </div>
@@ -588,6 +582,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.append(modal);
       modal.classList.add("fade-in");
       closeModal()
+        }
+      })
+
+
+
+
 
 
     };
