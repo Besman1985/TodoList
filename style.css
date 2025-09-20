@@ -125,13 +125,13 @@ body {
 
 .events-container {
     padding-top: 60px;
-    flex-grow: 1;
+
     overflow-y: auto;
     padding-right: 15px;
     background: #222424;
-    height: 680px;
+    height: 660px;
     border-radius: 40px;
-   
+
 }
 
 /* Стили для линии времени */
@@ -140,8 +140,8 @@ body {
     grid-template-columns: 50px 1fr;
     gap: 15px;
     position: relative;
-    padding-bottom: 32px;
-    
+    padding-bottom: 25px;
+
 }
 
 .time-line:not(:last-child)::after {
@@ -184,17 +184,17 @@ body {
     width: 5px;
 }
 
-.training::before {
+.low::before {
     background-color: #f7a02c;
 
 }
 
-.team-meeting::before {
+.high::before {
     background-color: #e91e63;
 
 }
 
-.call-nikita::before {
+.medium::before {
     background-color: #4caf50;
 
 }
@@ -364,7 +364,8 @@ body {
 
 .modal__content {
     position: relative;
-    width: 275px;
+    width: 300px;
+    height: 750px;
     padding: 40px;
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, .2);
@@ -428,15 +429,33 @@ body {
     border-radius: 10px;
 }
 
+.modal__input__textarea {
+    display: block;
+    margin: 20px auto 20px auto;
+    width: 175px;
+    height: 300px;
+    background-color: #2b6cb0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .2);
+    border: none;
+    font-size: 18px;
+    font: black;
+    text-align: center;
+    padding: 0 20px;
+    outline: 0;
+    border-radius: 10px;
+}
+
 .modal__input::placeholder {
     color: #000;
 }
 
 .modal .btn {
+    border-radius: 5px;
     font: black;
     background-color: #2b6cb0;
     display: block;
     width: 175px;
+    height: 30px;
     margin: 0 auto
 }
 
@@ -456,7 +475,7 @@ Weather CSS */
     position: absolute;
     height: 880px;
     border-radius: 40px;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -618,12 +637,8 @@ Weather CSS */
     text-align: center;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease;
 }
 
-.weather-card:hover {
-    transform: translateY(-5px);
-}
 
 .weather-card h2 {
     font-size: 20px;
@@ -751,7 +766,7 @@ Weather CSS */
     }
 
     to {
-        display: block;
+
         opacity: 1;
         transform: translateY(0);
     }
@@ -773,4 +788,107 @@ Weather CSS */
         display: none;
         /* Скрывает элемент после завершения анимации */
     }
+}
+
+.check {
+    margin: 0px 0px 20px 75px;
+}
+
+
+
+/* 
+Shops Class List */
+
+
+.divInputShops {
+    width: 100%;
+    height: 100%;
+}
+
+.shopping-form {
+    background-color: #2e2a2a;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 628px;
+    text-align: center;
+}
+
+/* Стили для заголовка */
+.shopping-form h2 {
+    color: #d8bebe;
+    margin-bottom: 25px;
+}
+
+/* Стили для поля ввода и кнопки */
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.shopping-form input[type="text"] {
+    flex-grow: 1;
+    /* Поле ввода занимает всё доступное место */
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.shopping-form input[type="text"]:focus {
+    outline: none;
+    border-color: #4a90e2;
+    /* Синяя рамка при фокусе */
+}
+
+.shopping-form button {
+    padding: 12px 20px;
+    background-color: #4a90e2;
+    /* Синий цвет кнопки */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.shopping-form button:hover {
+    background-color: #357bd8;
+}
+
+/* Тёмно-синий цвет при наведении */
+
+.shops__item {
+
+    margin: 20px;
+    height: 100%
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+ .lu-title {
+    text-align: center;
+ }
+
+li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.item-text {
+    flex-grow: 1;
+}
+
+.checkbox {
+    margin-left: 15px;
+    width: 20px;
+    height: 20px;
 }

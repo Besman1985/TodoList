@@ -2,14 +2,7 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  function clearApp() {
-    document.querySelector(".header").innerHTML = "";
-    document.querySelector(".events-container").innerHTML = "";
-    document.querySelector(".wraper-nav-cal").innerHTML = "";
-  };
-
-
-
+ 
   function renderToDo() {
 
     document.querySelector(".calendar-app").classList.remove("fade-out");
@@ -201,8 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     //  вешаем обработчик событий на форму, данные с формы отправляем в localStorage  и снова рендерим страницу.
-    form.addEventListener('submit', event => {
-
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
       const formObj = {};
       let formData = new FormData(form);
@@ -210,27 +202,29 @@ document.addEventListener('DOMContentLoaded', () => {
         formObj[index] = item;
       });
       localStorage.setItem(Date.now(), JSON.stringify(formObj));
-      modal.style.display = "none";
-      renderToDo();
-      form.reset();
+      modal.classList.remove("fade-in");
+      modal.classList.add("fade-out");
+      setTimeout(renderToDo, 1000);
     });
 
 
     // добавляем обработчик на кнопку "добавить событие"
     addBtn.addEventListener("click", () => {
       modal.style.display = "block";
+      modal.classList.add("fade-in");
     });
 
 
 
     //  создаем класс "событие и его метод" 
     class Todo {
-      constructor(id, date, time, item, content) {
+      constructor(id, date, time, item, content, priority) {
         this.id = id
         this.date = date
         this.time = time
         this.item = item
         this.content = content
+        this.priority = priority
 
       }
       //  создаем метод для rendera событий
@@ -245,7 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.id == +sliceTime && card.id == this.date && card.classList.contains("active")) {
               const event = document.createElement(`div`);
               event.id = `${this.id}`;
-              event.classList.add("event-card", "training");
+              event.classList.add("event-card");
+              if (this.priority == "low") {
+                event.classList.add("low")
+              } else if (this.priority == "medium") {
+                event.classList.add("medium")
+              } else if (this.priority == "high") {
+                event.classList.add("high")
+              }
               event.innerHTML = `<span class="event-title">${this.item}</span>
                     <span class="event-details">${this.content}</span>
                     <span class="event-time">${this.time}</span>
@@ -273,18 +274,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Проверяем localStorage на посторонние ключи, создаем новый "обьект собыий" и запускаем метод render
       for (let id of localObj) {
-        if (typeof (+id) == "number") {
+        if (!parseInt(id)) {
+          continue
+        } else {
           let n = JSON.parse(localStorage.getItem(id));
-          let { date, item, content, time } = n;
+          let { date, item, content, time, priority } = n;
           let t = +(time.slice(0, 2));
           for (let i of oursArr) {
             if (t == i) {
-              const newEvent = new Todo(id, date, time, item, content);
+              const newEvent = new Todo(id, date, time, item, content, priority);
               newEvent.rederToDo();
+              deletEvent();
             }
           };
-        } else {
-          continue
+
         };
 
 
@@ -298,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderModal() {
       const modal = document.createElement("div");
       modal.classList.add("modal");
+
       modal.innerHTML = `
      <div class="modal__dialog">
                 <div class="modal__content">
@@ -307,8 +311,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input required placeholder="Дата" name="date" type="date" class="modal__input">
                         <input required placeholder="Дата" name="time" type="time" class="modal__input">
                         <input required placeholder="Название" name="item" type="text" class="modal__input">
-                        <textarea class="modal__input" required placeholder="Что нужно сделать..." name="content" type="text" class="modal__cont"></textarea>
-
+                        <textarea class="modal__input__textarea" required placeholder="Что нужно сделать..." name="content" type="text" class="modal__cont"></textarea>
+                        <div class="check">
+                        <div >
+                          <input type="radio" id="high-priority" name="priority" value="high" checked>
+                          <label for="high-priority">Очень важно</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="medium-priority" name="priority" value="medium">
+                          <label for="medium-priority">Важно</label>
+                        </div>
+                        <div>
+                          <input type="radio" id="low-priority" name="priority" value="low">
+                          <label for="low-priority">Неважно</label>
+                        </div>
+                        </div>
                         <button class="btn btn_dark btn_min">Создать</button>
                     </form>
                 </div>
@@ -388,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch("http://api.weatherapi.com/v1/forecast.json?key=ae8e436780834047a53182801251309&q=Petrozavodsk&days=7&aqi=no&alerts=no")
       .then(data => data.json())
       .then(json => {
+        console.log(json);
         getData(json);
         dayWeatherCard(json);
       });
@@ -395,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // создаем класс карточек прогноза по дням
     class RenderDayCard {
-      constructor(date, avgtemp_c,icon) {
+      constructor(date, avgtemp_c, icon) {
         this.date = date
         this.avgtemp_c = avgtemp_c
         this.icon = icon
@@ -421,9 +439,9 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let item of forecastday) {
         let { date } = item;
         let { avgtemp_c } = item.day;
-        let {icon} = item.day.condition;
+        let { icon } = item.day.condition;
         console.log(item);
-        let card = new RenderDayCard(date, avgtemp_c,icon);
+        let card = new RenderDayCard(date, avgtemp_c, icon);
         card.render();
       }
       // Добавляем обработчик на карточки
@@ -434,11 +452,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function getData(nam) {
       let { name } = nam.location;
       let { humidity, wind_kph, pressure_mb, temp_c, wind_dir, is_day } = nam.current;
-      let {icon} = nam.current.condition;
       // рендерим Header
       headerWeather(temp_c, name);
       // рендерим Conteiner
-      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day,icon);
+      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day);
 
     }
 
@@ -468,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     //  функция для рендера Conteiner
-    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day,icon) {
+    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day) {
 
       const wetherAPP = document.querySelector(".events-container");
       wetherAPP.innerHTML = `
@@ -490,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="weather-graphic">
-                <img src=${icon} alt="Облачно с солнцем">
+                <img src="icons/weather/Gemini_Generated_Image_cdokd2cdokd2cdok-Photoroom.PNG" alt="Облачно с солнцем">
             </div>
             <section class="weekly-forecast" 
             </section>
@@ -499,16 +516,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // функция для меню подробного прогноза по дням
     function renderDetailedDay(nam, id) {
 
-
-      console.log(nam);
       nam.forecast.forecastday.forEach(item => {
         if (id == item.date) {
           let { sunset, sunrise, moonset, moonrise } = item.astro,
             { avghumidity, avgtemp_c, maxtemp_c, maxwind_kph, mintemp_c, daily_chance_of_rain, totalprecip_mm, uv } = item.day;
-            
-                const modal = document.createElement("div");
-      modal.classList.add("modal_weather");
-      modal.innerHTML = `
+
+          const modal = document.createElement("div");
+          modal.classList.add("modal_weather");
+          modal.innerHTML = `
       <div class="modal__dialog">
         <div class="weather-card">
           <div class="wave"></div>
@@ -579,9 +594,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       </div>`;
-      document.body.append(modal);
-      modal.classList.add("fade-in");
-      closeModal()
+          document.body.append(modal);
+          modal.classList.add("fade-in");
+          closeModal()
         }
       })
 
@@ -625,7 +640,97 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   };
 
+  function renderShopsCheck() {
+    document.querySelector(".calendar-app").classList.remove("fade-out");
+    document.querySelector(".calendar-app").classList.add("fade-in");
+    document.querySelector(".events-container").classList.remove("weather-app")
+    document.querySelector(".events-container").innerHTML = `
+    <h1 class="lu-title">Список покупок</h1>
+    <ul class="ul-List"></ul>
+`;
+    const divInputShops = document.createElement("div");
+    divInputShops.classList.add("divInputShops");
+    divInputShops.innerHTML = `
+    <form class="shopping-form">
+  <h2>Что сегодня купим?</h2>
+  <div class="input-group">
+    <input type="text" id="new-item" name="item" placeholder="Что нужно купить.">
+    <button type="submit">Добавить</button>
+  </div>
+</form>
+  `;
+    document.querySelector(".header").prepend(divInputShops);
 
+    const form = document.querySelector(".shopping-form");
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      let formData = new FormData(form);
+      formData.forEach((item) => {
+        localStorage.setItem(`shops:${Date.now()}`, `${item}`);
+      });
+       renderByItem();
+      form.reset();
+    });
+
+
+
+    function renderByItem() {
+      document.querySelector(".ul-List").innerHTML = "";
+      const localStorageKeys = Object.keys(localStorage);
+      for (let item of localStorageKeys) {
+        if (item.slice(0, 5) == "shops") {
+          const li = document.createElement("li");
+          li.classList.add("shops__item");
+          li.id = item;
+          li.innerHTML = `
+          <span class="item-text">${localStorage.getItem(item)}</span>
+          <input type="checkbox" class="checkbox">
+          `;
+          document.querySelector(".ul-List").append(li);   
+        };
+      }
+    };
+
+    renderByItem();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  };
 
 
 
@@ -648,25 +753,22 @@ document.addEventListener('DOMContentLoaded', () => {
           document.querySelector(".calendar-app").classList.add("fade-out");
           document.querySelector("#ToDo").classList.add("active");
           setTimeout(clearApp, 1000);
-          setTimeout(renderToDo, 1500);
-
-
+          setTimeout(renderToDo, 1000);
 
         } else if (event.target.id == "Weather" || event.target.id == "WeatherIMG") {
           document.querySelector(".calendar-app").classList.remove("fade-in");
           document.querySelector(".calendar-app").classList.add("fade-out");
           document.querySelector("#Weather").classList.add("active");
           setTimeout(clearApp, 1000);
-          setTimeout(renderWather, 1500);
-
-
+          setTimeout(renderWather, 1000);
 
         } else if (event.target.id == "CheckList" || event.target.id == "CheckListIMG") {
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
           document.querySelector("#CheckList").classList.add("active");
-          document.querySelector(".header").innerHTML = "";
-          document.querySelector(".events-container").innerHTML = "";
-          document.querySelector(".wraper-nav-cal").innerHTML = "";
-          alert("Функционал будет позже")
+          setTimeout(clearApp, 1000);
+          setTimeout(renderShopsCheck, 1000);
+
         } else if (event.target.id == "News" || event.target.id == "NewsIMG") {
           document.querySelector("#News").classList.add("active");
           document.querySelector(".header").innerHTML = "";
@@ -682,7 +784,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
+ function clearApp() {
+    document.querySelector(".header").innerHTML = "";
+    document.querySelector(".events-container").innerHTML = "";
+    document.querySelector(".wraper-nav-cal").innerHTML = "";
+  };
 
 
 
