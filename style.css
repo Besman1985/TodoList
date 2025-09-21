@@ -1,5 +1,5 @@
 body {
-    background-color: #0b0d19;
+    background-color: #0d0f1a;
     font-family: 'Poppins', sans-serif;
     color: #e0e0e0;
     margin: 0;
@@ -128,7 +128,7 @@ body {
 
     overflow-y: auto;
     padding-right: 15px;
-    background: #222424;
+    background: #1a1c2c;
     height: 660px;
     border-radius: 40px;
 
@@ -806,7 +806,7 @@ Shops Class List */
 }
 
 .shopping-form {
-    background-color: #2e2a2a;
+    background-color: #1a1c2c;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -870,9 +870,10 @@ ul {
     list-style: none;
     padding: 0;
 }
- .lu-title {
+
+.lu-title {
     text-align: center;
- }
+}
 
 li {
     margin: 10px 0;
@@ -891,4 +892,68 @@ li {
     margin-left: 15px;
     width: 20px;
     height: 20px;
+}
+
+.check-shops {
+    color: greenyellow;
+
+}
+
+.container-shops-list {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #669191;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+    font-size: 24px;
+    color: #050505;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #d32f2f;
+}
+
+.btn-cancel {
+    background-color: #9e9e9e;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #757575;
+}
+
+.delete-icon {
+    padding-left: 5px;
+    width: 18px;
+    /* Установите желаемую ширину */
+    height: 18px;
+    /* Установите желаемую высоту */
+    cursor: pointer;
+    /* Показывает, что элемент кликабельный */
+    vertical-align: middle;
+    /* Выравнивает иконку по центру текста, если она рядом */
 }
