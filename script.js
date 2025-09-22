@@ -12,9 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
+    if (document.querySelector(".events-container").classList.contains("mews-conteiner")) {
+      document.querySelector(".events-container").classList.remove("mews-conteiner");
 
+    };
     document.querySelector(".events-container").classList.remove("weather-app")
     document.querySelector(".events-container").innerHTML = "";
+
     const wraperNavCal = document.querySelector(".wraper-nav-cal");
     createElementCalendar();
     const calendarWeek = document.querySelector('.week-days');
@@ -399,6 +403,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderToDo();
 
   function renderWather() {
+    if (document.querySelector(".events-container").classList.contains("mews-conteiner")) {
+      document.querySelector(".events-container").classList.remove("mews-conteiner");
+
+    };
     document.querySelector(".calendar-app").classList.remove("fade-out");
     document.querySelector(".calendar-app").classList.add("fade-in");
     document.querySelector(".events-container").classList.add("weather-app");
@@ -465,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // функция для получения дня недели по индексу
     function getDayOfWeek(nam) {
       let n;
-      const week = ["Воскресенье","Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+      const week = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
       week.forEach((item, index) => {
         if (nam == index) {
           n = item
@@ -644,6 +652,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function renderShopsCheck() {
+    if (document.querySelector(".events-container").classList.contains("mews-conteiner")) {
+      document.querySelector(".events-container").classList.remove("mews-conteiner");
+
+    };
     document.querySelector(".calendar-app").classList.remove("fade-out");
     document.querySelector(".calendar-app").classList.add("fade-in");
     document.querySelector(".events-container").classList.remove("weather-app")
@@ -842,11 +854,12 @@ document.addEventListener('DOMContentLoaded', () => {
           setTimeout(renderShopsCheck, 1000);
 
         } else if (event.target.id == "News" || event.target.id == "NewsIMG") {
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
           document.querySelector("#News").classList.add("active");
-          document.querySelector(".header").innerHTML = "";
-          document.querySelector(".events-container").innerHTML = "";
-          document.querySelector(".wraper-nav-cal").innerHTML = "";
-          alert("Функционал будет позже")
+          setTimeout(clearApp, 1000);
+          setTimeout(renderNewsApp, 1000);
+
         }
       }
     });
@@ -877,18 +890,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// general, world, nation, business, technology, entertainment, sports, science and health.
+  // general, world, nation, business, technology, entertainment, sports, science and health.
 
 
 
 
-  apikey = '4544cbf01dd600064686b8125853d3c5';
-  category = 'technology';
-  url = 'https://gnews.io/api/v4/top-headlines?category=' + category + '&lang=ru&country=rus&max=10&apikey=' + apikey;
 
-  fetch(url)
-    .then(response => response.json())
-    .then(data => renderNews(data));
 
 
 
@@ -1085,22 +1092,132 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  function renderNews(responce) {
-    const articles = Object.values(responce.articles);
-    for (let value of articles) {
-      let { title, description, content, url, image } = value;
-      console.log(content);
-    }
-
-  };
-
-
-
-  renderNews(obj);
 
 
 
 
+  function renderNewsApp() {
+    document.querySelector(".calendar-app").classList.remove("fade-out");
+    document.querySelector(".calendar-app").classList.add("fade-in");
+    document.querySelector(".events-container").classList.remove("weather-app");
+    function renderHeaderBtn() {
+      const header = document.createElement("div");
+      header.classList.add("header-right");
+      header.innerHTML = `
+            <div div class ="language-switcher" >
+                <button class="active">RU</button>
+                <button>EN</button>
+            </div >
+            <div class="menu-container">
+              <button class="menu-btn">Темы</button>
+              <div class="dropdown-content">
+                <a href="#">Общее</a>
+                <a href="#">Мир</a>
+                <a href="#">Страна</a>
+                <a href="#">Бизнес</a>
+                <a href="#">Технологии</a>
+                <a href="#">Развлечения</a>
+                <a href="#">Спорт</a>
+                <a href="#">Наука</a>
+                <a href="#">Здоровье</a>
+              </div>
+            </div>
+
+
+          `;
+      document.querySelector(".header").prepend(header);
+    };
+    renderHeaderBtn();
+
+
+    const main = document.createElement("main");
+    main.innerHTML = `
+              <h2 class="carousel-title" > Главные новости</h2 >
+              <div class="news-carousel">  
+              </div>`;
+    document.querySelector(".wraper-nav-cal").prepend(main);
+
+
+    const lastNewsTag = document.createElement("div");
+    lastNewsTag.innerHTML = `
+            <h2 class="carousel-title news-list-title" > Последние новости</h2 >
+              <div class="news-list">
+              </div>
+          `;
+    document.querySelector(".events-container").append(lastNewsTag);
+
+
+
+    class NewsCard {
+      constructor(title, description, url, image) {
+        this.title = title
+        this.description = description
+        this.image = image
+        this.url = url
+      }
+      renderCarusel() {
+        const carousel = document.createElement("div");
+        carousel.classList.add("news-card");
+        carousel.id = this.url;
+        carousel.innerHTML = `
+                  <img src=${this.image} alt=>
+                    <div class="card-content">
+                      <h3>${this.title}</h3>
+                      <p>${this.description}</p>
+                    </div>
+          `;
+        document.querySelector(".news-carousel").append(carousel);
+      }
+      renderLastNews() {
+        const lastNews = document.createElement("div");
+        lastNews.id = this.url;
+        lastNews.classList.add("news-item");
+        lastNews.innerHTML = `
+                  <img src=${this.image} alt="Изображение новости">
+                    <div class="item-content">
+                      <h4>${this.title}</h4>
+                      <p></p>
+                    </div>
+  `;
+        document.querySelector(".news-list").prepend(lastNews);
+      }
+    };
+
+    let apikey = '4544cbf01dd600064686b8125853d3c5';
+    let category = 'technology';
+    let url = 'https://gnews.io/api/v4/top-headlines?category=' + category + '&lang=ru&country=rus&max=10&apikey=' + apikey;
+
+    fetch(url)
+      .then(response => response.json())
+      .then((data) => {
+        carousel(data);
+        lastNews(data);
+      });
+
+
+
+    function carousel(responce) {
+      const articles = Object.values(responce.articles);
+      for (let value of articles) {
+        let { title, description, url, image } = value;
+        const cardNews = new NewsCard(title, description, url, image);
+        cardNews.renderCarusel();
+      }
+    };
+
+
+
+
+    function lastNews(responce) {
+      document.querySelector(".events-container").classList.add("mews-conteiner");
+      const articles = Object.values(responce.articles);
+      for (let value of articles) {
+        let { title, description, url, image } = value;
+        const cardNews = new NewsCard(title, description, url, image);
+        cardNews.renderLastNews();
+      };
+    };
+  }
 
 
 
@@ -1130,4 +1247,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-});
+
+
+
+
+
+  });
