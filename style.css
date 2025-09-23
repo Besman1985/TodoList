@@ -1061,7 +1061,7 @@ main {
 
 .news-card {
     min-width: 300px;
-   
+   cursor: pointer;
     max-height: 400px;
     background-color: #b4adad;
     border-radius: 10px;
@@ -1114,6 +1114,7 @@ main {
 }
 
 .news-item {
+    cursor: pointer;
     display: flex;
     background-color: #b4adad;
     padding: 15px;
