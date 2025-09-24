@@ -462,11 +462,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // обрабатываем данные с сервера для Header и Conteiner
     function getData(nam) {
       let { name } = nam.location;
-      let { humidity, wind_kph, pressure_mb, temp_c, wind_dir, is_day } = nam.current;
+      let { humidity, wind_kph, pressure_mb, temp_c, wind_dir } = nam.current;
       // рендерим Header
       headerWeather(temp_c, name);
       // рендерим Conteiner
-      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day);
+      renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir);
 
     }
 
@@ -496,12 +496,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     //  функция для рендера Conteiner
-    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir, is_day) {
+    function renderWatherConteiner(humidity, wind_kph, pressure_mb, wind_dir) {
 
       const wetherAPP = document.querySelector(".events-container");
       wetherAPP.innerHTML = `
             <div class="today-weather">
-                <h2 class="today-day">${getDayOfWeek(is_day)}</h2>
+                <h2 class="today-day">${getDayOfWeek(new Date().getDay())}</h2>
                 <div class="today-details">
                     <div class="detail-item">
                         <img src="icons/weather/free-icon-humidity-2435986.PNG" alt="Влажность" class="detail-icon">
@@ -816,105 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   };
 
-
-
-
-
-
-
-
-
-
-
-
-  const BtnNavProject = document.querySelectorAll(".navbar-item");
-  BtnNavProject.forEach(item => {
-    item.addEventListener("click", event => {
-      if (event.target || event.target.tagName == 'BUTTON' || event.target.tagName == 'IMG') {
-        if (event.target.id == "ToDo" || event.target.id == "ToDoIMG") {
-
-          document.querySelector(".calendar-app").classList.remove("fade-in");
-          document.querySelector(".calendar-app").classList.add("fade-out");
-          document.querySelector("#ToDo").classList.add("active");
-          setTimeout(clearApp, 1000);
-          setTimeout(renderToDo, 1000);
-
-        } else if (event.target.id == "Weather" || event.target.id == "WeatherIMG") {
-          document.querySelector(".calendar-app").classList.remove("fade-in");
-          document.querySelector(".calendar-app").classList.add("fade-out");
-          document.querySelector("#Weather").classList.add("active");
-          setTimeout(clearApp, 1000);
-          setTimeout(renderWather, 1000);
-
-        } else if (event.target.id == "CheckList" || event.target.id == "CheckListIMG") {
-          document.querySelector(".calendar-app").classList.remove("fade-in");
-          document.querySelector(".calendar-app").classList.add("fade-out");
-          document.querySelector("#CheckList").classList.add("active");
-          setTimeout(clearApp, 1000);
-          setTimeout(renderShopsCheck, 1000);
-
-        } else if (event.target.id == "News" || event.target.id == "NewsIMG") {
-          document.querySelector(".calendar-app").classList.remove("fade-in");
-          document.querySelector(".calendar-app").classList.add("fade-out");
-          document.querySelector("#News").classList.add("active");
-          setTimeout(clearApp, 1000);
-          setTimeout(renderNewsApp, 1000);
-
-        }
-      }
-    });
-  });
-
-
-
-
-
-  function clearApp() {
-    document.querySelector(".header").innerHTML = "";
-    document.querySelector(".events-container").innerHTML = "";
-    document.querySelector(".wraper-nav-cal").innerHTML = "";
-  };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // general, world, nation, business, technology, entertainment, sports, science and health.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   function renderNewsApp() {
     document.querySelector(".calendar-app").classList.remove("fade-out");
     document.querySelector(".calendar-app").classList.add("fade-in");
@@ -953,7 +854,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     };
     renderHeaderBtn();
-
 
     const newsCarusel = () => {
       const main = document.createElement("main");
@@ -1034,7 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function lastNews(lang) {
       let apikey = '4544cbf01dd600064686b8125853d3c5';
-      let category = theme;
+      let category = "world";
       let url = 'https://gnews.io/api/v4/top-headlines?category=' + category + `&lang=${lang}&country=${lang}&max=10&apikey=` + apikey;
 
       fetch(url)
@@ -1052,7 +952,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     lastNews(lang);
 
-    function activeBtnLang(lang, theme) {
+    function activeBtnLang() {
       const btn = document.querySelectorAll(".btnNews");
       btn.forEach(item => {
         item.addEventListener("click", event => {
@@ -1064,6 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lang = item.id;
             document.querySelector(".news-carousel").innerHTML = "";
             document.querySelector(".news-list").innerHTML = "";
+            console.log(lang, theme);
             carousel(lang, theme);
             lastNews(lang);
 
@@ -1073,7 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     };
-    activeBtnLang();
+    activeBtnLang(theme);
 
     function newsLink(selector) {
       document.querySelectorAll(selector).forEach(item => {
@@ -1086,15 +987,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     };
 
-
-    function setThemeNews(lang, theme) {
+    function setThemeNews(theme) {
       document.querySelectorAll(".themeNews").forEach(item => {
         item.addEventListener("click", event => {
           if (event.target == item) {
             theme = item.id;
             document.querySelector(".news-carousel").innerHTML = "";
-            carousel(lang, theme);
             console.log(lang, theme);
+            carousel(lang, theme);
+
 
           };
 
@@ -1104,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     };
-    setThemeNews(lang, theme);
+    setThemeNews(theme);
 
 
 
@@ -1113,6 +1014,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   };
+
+
+
+
+
+
+
+
+
+  function clearApp() {
+    document.querySelector(".header").innerHTML = "";
+    document.querySelector(".events-container").innerHTML = "";
+    document.querySelector(".wraper-nav-cal").innerHTML = "";
+  };
+
+  const BtnNavProject = document.querySelectorAll(".navbar-item");
+  BtnNavProject.forEach(item => {
+    item.addEventListener("click", event => {
+      if (event.target || event.target.tagName == 'BUTTON' || event.target.tagName == 'IMG') {
+        if (event.target.id == "ToDo" || event.target.id == "ToDoIMG") {
+
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
+          document.querySelector("#ToDo").classList.add("active");
+          setTimeout(clearApp, 1000);
+          setTimeout(renderToDo, 1000);
+
+        } else if (event.target.id == "Weather" || event.target.id == "WeatherIMG") {
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
+          document.querySelector("#Weather").classList.add("active");
+          setTimeout(clearApp, 1000);
+          setTimeout(renderWather, 1000);
+
+        } else if (event.target.id == "CheckList" || event.target.id == "CheckListIMG") {
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
+          document.querySelector("#CheckList").classList.add("active");
+          setTimeout(clearApp, 1000);
+          setTimeout(renderShopsCheck, 1000);
+
+        } else if (event.target.id == "News" || event.target.id == "NewsIMG") {
+          document.querySelector(".calendar-app").classList.remove("fade-in");
+          document.querySelector(".calendar-app").classList.add("fade-out");
+          document.querySelector("#News").classList.add("active");
+          setTimeout(clearApp, 1000);
+          setTimeout(renderNewsApp, 1000);
+
+        }
+      }
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // general, world, nation, business, technology, entertainment, sports, science and health.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
