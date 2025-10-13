@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="event-details">${this.content}</span>
                     <span class="event-time">${this.time}</span>
                     <div class="delete-btn-events">
-                    <img src="icons/free-icon-delete-11502841.PNG" alt="Удалить" class="detail-icon">
+                    <img src="../icons/free-icon-delete-11502841.PNG" alt="Удалить" class="detail-icon">
                     </div>
                     `;
 
@@ -435,10 +435,9 @@ document.addEventListener('DOMContentLoaded', () => {
         div.classList.add("forecast-day");
         div.innerHTML = `
                 <span class="day-name">${this.date.slice(8.9)}</span>
-                <img id= "${this.date}" src="http:${this.icon}" alt class="forecast-icon">
+                <img id= "${this.date}" src=${this.icon} alt class="forecast-icon">
                 <span class="day-temp">${this.avgtemp_c}°C</span>
-  `;     
-  console.log(this.icon);
+  `;
         document.querySelector(".weekly-forecast").append(div);
 
       }
@@ -452,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let { date } = item;
         let { avgtemp_c } = item.day;
         let { icon } = item.day.condition;
+        console.log(item);
         let card = new RenderDayCard(date, avgtemp_c, icon);
         card.render();
       }
@@ -816,202 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   };
 
- function renderNewsApp() {
-    document.querySelector(".calendar-app").classList.remove("fade-out");
-    document.querySelector(".calendar-app").classList.add("fade-in");
-    document.querySelector(".events-container").classList.remove("weather-app");
-    let lang = "ru";
-    let theme = "world";
-
-
-
-    const renderHeaderBtn = () => {
-      const header = document.createElement("div");
-      header.classList.add("header-right");
-      header.innerHTML = `
-            <div  class ="language-switcher" >
-                <button id="ru" class="btnNews active">RU</button>
-                <button id="en" class="btnNews">EN</button>
-            </div> 
-            <div class="menu-container">
-              <button class="menu-btn">Темы</button>
-              <div class="dropdown-content">
-                <a class ="themeNews" id = "general" href="#">Общее</a>
-                <a class ="themeNews" id = "world" href="#">Мир</a>
-                <a class ="themeNews" id = "nation" href="#">Страна</a>
-                <a class ="themeNews" id = "business" href="#">Бизнес</a>
-                <a class ="themeNews" id = "technology" href="#">Технологии</a>
-                <a class ="themeNews" id = "entertainment" href="#">Развлечения</a>
-                <a class ="themeNews" id = "sports" href="#">Спорт</a>
-                <a class ="themeNews" id = "science" href="#">Наука</a>
-                <a class ="themeNews" id = "health" href="#">Здоровье</a>
-              </div>
-            </div>
-
-
-          `;
-      document.querySelector(".header").prepend(header);
-
-    };
-    renderHeaderBtn();
-
-    const newsCarusel = () => {
-      const main = document.createElement("main");
-      main.innerHTML = `
-                <h2 class="carousel-title" > Главные новости</h2 >
-                <div class="news-carousel">  
-                </div>`;
-      document.querySelector(".wraper-nav-cal").prepend(main);
-    };
-    newsCarusel();
-
-    const newsList = () => {
-
-      const lastNewsTag = document.createElement("div");
-      lastNewsTag.innerHTML = `
-              <h2 class="carousel-title news-list-title" > Последние новости</h2 >
-                <div class="news-list">
-                </div>
-            `;
-      document.querySelector(".events-container").append(lastNewsTag);
-    };
-    newsList();
-
-    class NewsCard {
-      constructor(title, description, url, image) {
-        this.title = title
-        this.description = description
-        this.image = image
-        this.url = url
-      }
-      renderCarusel() {
-        const carousel = document.createElement("div");
-        carousel.classList.add("news-card");
-        carousel.id = this.url;
-        carousel.innerHTML = `
-                    <img src=${this.image} alt=>
-                      <div class="card-content">
-                        <h3>${this.title}</h3>
-                        <p>${this.description}</p>
-                      </div>
-            `;
-        document.querySelector(".news-carousel").append(carousel);
-      }
-      renderLastNews() {
-        const lastNews = document.createElement("div");
-        lastNews.id = this.url;
-        lastNews.classList.add("news-item");
-        lastNews.innerHTML = `
-                    <img src=${this.image} alt="Изображение новости">
-                      <div class="item-content">
-                        <h4>${this.title}</h4>
-                        <p></p>
-                      </div>
-    `;
-        document.querySelector(".news-list").prepend(lastNews);
-      }
-    };
-
-    function carousel(lang, theme) {
-      let apikey = '4544cbf01dd600064686b8125853d3c5';
-      let category = theme;
-      let url = 'https://gnews.io/api/v4/top-headlines?category=' + category + `&lang=${lang}&country=${lang}&max=10&apikey=` + apikey;
-
-      fetch(url)
-        .then(response => response.json())
-        .then((data) => {
-          const articles = Object.values(data.articles);
-          for (let value of articles) {
-            let { title, description, url, image } = value;
-            const cardNews = new NewsCard(title, description, url, image);
-            cardNews.renderCarusel();
-            newsLink(".news-card");
-
-          }
-        });
-    };
-    carousel(lang, theme)
-
-    function lastNews(lang) {
-      let apikey = '4544cbf01dd600064686b8125853d3c5';
-      let category = theme;
-      let url = 'https://gnews.io/api/v4/top-headlines?category=' + category + `&lang=${lang}&country=${lang}&max=10&apikey=` + apikey;
-
-      fetch(url)
-        .then(response => response.json())
-        .then((data) => {
-          document.querySelector(".events-container").classList.add("mews-conteiner");
-          const articles = Object.values(data.articles);
-          for (let value of articles) {
-            let { title, description, url, image } = value;
-            const cardNews = new NewsCard(title, description, url, image);
-            cardNews.renderLastNews();
-            newsLink(".news-item");
-          };
-        });
-    };
-    lastNews(lang);
-
-    function activeBtnLang(lang, theme) {
-      const btn = document.querySelectorAll(".btnNews");
-      btn.forEach(item => {
-        item.addEventListener("click", event => {
-          if (event.target == item) {
-            btn.forEach(item => {
-              item.classList.remove("active");
-            });
-            item.classList.add("active");
-            lang = item.id;
-            document.querySelector(".news-carousel").innerHTML = "";
-            document.querySelector(".news-list").innerHTML = "";
-            carousel(lang, theme);
-            lastNews(lang);
-
-          };
-        });
-
-      });
-
-    };
-    activeBtnLang();
-
-    function newsLink(selector) {
-      document.querySelectorAll(selector).forEach(item => {
-        item.addEventListener("click", event => {
-          if (event.currentTarget == item) {
-            window.open(item.id, "_blank");
-          }
-        });
-      });
-
-    };
-
-    function setThemeNews(lang, theme) {
-      document.querySelectorAll(".themeNews").forEach(item => {
-        item.addEventListener("click", event => {
-          if (event.target == item) {
-            theme = item.id;
-            document.querySelector(".news-carousel").innerHTML = "";
-            carousel(lang, theme);
-            console.log(lang, theme);
-
-          };
-
-        });
-      });
-
-
-
-    };
-    setThemeNews(lang, theme);
-
-
-
-
-
-
-
-  };
 
 
 
@@ -1021,12 +825,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-  function clearApp() {
-    document.querySelector(".header").innerHTML = "";
-    document.querySelector(".events-container").innerHTML = "";
-    document.querySelector(".wraper-nav-cal").innerHTML = "";
-  };
 
 
   const BtnNavProject = document.querySelectorAll(".navbar-item");
@@ -1071,13 +869,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
- 
-
-
-
-
-
+  function clearApp() {
+    document.querySelector(".header").innerHTML = "";
+    document.querySelector(".events-container").innerHTML = "";
+    document.querySelector(".wraper-nav-cal").innerHTML = "";
+  };
 
 
 
@@ -1094,6 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  // general, world, nation, business, technology, entertainment, sports, science and health.
 
 
 
@@ -1106,4 +903,353 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-});
+
+
+
+  const obj = {
+
+    information: {
+      realTimeArticles: {
+        message: 'Real-time news data is only available on paid plans. Free plan has a 12-hour delay. Upgrade your plan here to remove the delay: https://gnews.io/change-plan'
+      }
+    },
+    totalArticles: 224598,
+    articles: [
+      {
+        id: '145dda464834624cd3ea459265e401ed',
+        title: 'Балтия лишилась военной поддержки США, - Reuters',
+        description: 'США намерены пересмотреть приоритеты военной помощи странам Балтии, что вызывает тревогу среди европейских дипломатов и экспертов по безопасности....',
+        content: 'В конце августа представители Пентагона на встрече с европейскими дипломатами заявили о планах ограничить поддержку в сфере безопасности Латвии, Литвы и Эстонии. Чиновник Дэвид Бейкер подчеркнул, что Европе необходимо снизить зависимость от США, а ам... [1422 chars]',
+        url: 'https://www.rbc.ua/ukr/news/tramp-skorochue-viyskovu-dopomogu-latviyi-1758422849.html',
+        image: 'https://www.rbc.ua/static/img/_/g/_gettyimages_2204103483__1__bad664a7c82a12a29584baaca6963351_1300x820.jpg',
+        publishedAt: '2025-09-21T03:10:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: '1139cf8acb42f9663be7d8f18a1b125c',
+        title: 'Иран заявил, что приостанавливает сотрудничество с МАГАТЭ',
+        description: 'Высший совет национальной безопасности Ирана (ВСНБ) заявил, что после необдуманных шагов, предпринятых европейскими странами против Тегерана, сотрудничество с Международным агентством по атомной энергии (МАГАТЭ) будет приостановлено.',
+        content: 'Высший совет национальной безопасности Ирана (ВСНБ) заявил, что после "необдуманных" шагов, предпринятых европейскими странами против Тегерана, сотрудничество с Международным агентством по атомной энергии (МАГАТЭ) будет приостановлено.\n' +
+          'Источник: полу... [1629 chars]',
+        url: 'https://www.pravda.com.ua/rus/news/2025/09/21/7531779/',
+        image: 'https://img.pravda.com/images/doc/7/5/7531779_fb_image_rus_2025_09_21_06_07_49.jpg',
+        publishedAt: '2025-09-21T03:04:56Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: '631bf2f616eb4e849ed91e8df4c2a193',
+        title: 'Сегодня 21 сентября: какой праздник и день в истории',
+        description: '21 сентября в Украине – Всенародный день отца и День работника леса. Также сегодня – Международный день мира',
+        content: '21 сентября в Украине – Всенародный день отца и День работника леса. Также сегодня – Международный день мира. В этот день в 2022-м российский диктатор Путин объявил «частичную мобилизацию». В 1991-м в Армении состоялся референдум за независимость и в... [4500 chars]',
+        url: 'https://www.objectiv.tv/objectively/2025/09/21/segodnya-21-sentyabrya-kakoj-prazdnik-i-den-v-istorii-3/',
+        image: 'https://www.objectiv.tv/wp-content/uploads/2025/09/21-VERESNYA-scaled.jpg',
+        publishedAt: '2025-09-21T03:00:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: '7b3303f579551abd2afa9f98beb1db75',
+        title: 'Великобритания введет санкции против ХАМАС вместе с признанием Палестины',
+        description: 'EADaily, 21 сентября 2025. Премьер-министр Великобритании Кир Стармер введет новые санкции против ХАМАС, параллельно намереваясь признать Палестинское государство, передает Telegraph.',
+        content: 'Премьер-министр Великобритании Кир Стармер введет новые санкции против ХАМАС, параллельно намереваясь признать Палестинское государство, передает Telegraph.\n' +
+          'Стармер планирует сделать заявление по поводу ХАМАС 21 сентября, пишет издание.\n' +
+          'Его подход бу... [836 chars]',
+        url: 'https://eadaily.com/ru/news/2025/09/21/velikobritaniya-vvedet-sankcii-protiv-hamas-vmeste-s-priznaniem-palestiny',
+        image: 'https://img5.eadaily.com/r650x400/o/407/09d602148cd305585a500ceedcb7e.jpeg',
+        publishedAt: '2025-09-21T02:50:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: '3121497ec7de2d214635a7a76f56ff0b',
+        title: 'Энергичность Овнов, триумф Весов и истощение Рыб: подробный гороскоп на 22 сентября',
+        description: 'Понедельник, 22 сентября, пройдет под влиянием Луны. В этот день важно сохранять внутренний баланс и не торопиться с принятием важных решений. Энергия дня поможет лучше понять собственные чувства и мягко начать рабочую неделю, пишет ИА PrimaMedia.',
+        content: 'Понедельник, 22 сентября, пройдет под влиянием Луны. В этот день важно сохранять внутренний баланс и не торопиться с принятием важных решений. Энергия дня поможет лучше понять собственные чувства и мягко начать рабочую неделю, пишет ИА PrimaMedia.\n' +
+          'Ов... [1969 chars]',
+        url: 'https://primamedia.ru/news/2228547/',
+        image: 'https://primamedia.ru/f/main/5632/5631943.png?609e26fa5c98c8c2c300a2e32697308d',
+        publishedAt: '2025-09-21T02:09:11Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: 'e5c9f8ff410ddfeb62612480340ebdb7',
+        title: 'Финансовая удача в конце сентября: три знака зодиака получат неожиданные доходы',
+        description: 'Конец сентября принесет с собой мощные финансовые изменения, которые коснутся сразу нескольких знаков зодиака. Астрологи отмечают, что этот период станет временем приятных сюрпризов, денежных поступлений и выгодных возможностей.',
+        content: 'Конец сентября принесет с собой мощные финансовые изменения, которые коснутся сразу нескольких знаков зодиака. Астрологи отмечают, что этот период станет временем приятных сюрпризов, денежных поступлений и выгодных возможностей. Звезды откроют двери ... [1944 chars]',
+        url: 'https://www.obozrevatel.com/novosti-obschestvo/finansovaya-udacha-v-kontse-sentyabrya-tri-znaka-zodiaka-poluchat-neozhidannyie-dohodyi.htm',
+        image: 'https://i.obozrevatel.com/news/2024/7/25/50eb7fe4-04ce-4188-a721-0395ffa9696b.png?size=1200x630',
+        publishedAt: '2025-09-21T02:03:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: '5292e6105c3f953942a73b77328dbc9d',
+        title: 'В России жестко отреагировали на призыв экс-украинских властей "идти на Москву"',
+        description: 'Ранее на Украине призвали «идти на Москву»',
+        content: 'Ранее на Украине призвали «идти на Москву» Фото: Создано в Midjourney © URA.RU\n' +
+          'новость из сюжета\n' +
+          'Спецоперация РФ на Украине\n' +
+          'Бывший президент Украины Виктор Ющенко — ужасный трус и предатель. Об этом сообщил депутат Госдумы от Крыма Михаил Шеремет, ко... [3957 chars]',
+        url: 'https://ura.news/news/1052998892',
+        image: 'https://s.ura.news/images/news/figures/591/514/520e0c47-fd5f-4867-8040-7a66463d4542/zrk0il/L-1200.1.9.jpg',
+        publishedAt: '2025-09-21T01:38:50Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: 'ab0831938fc77c43910bbea9d3fcc917',
+        title: 'Народные методы лечения ОРВИ: какие оправданы, а какие опасны - 21 сентября 2025',
+        description: 'Наступивший сезон простуд и ОРВИ для многих — повод вспомнить бесценные бабушкины рецепты, с помощью которых нас когда-то - Здоровье - 21 сентября 2025 | 74.ру',
+        content: 'Наступивший сезон простуд и ОРВИ для многих — повод вспомнить бесценные бабушкины рецепты, с помощью которых нас когда-то лечили в детстве. Кому не сыпали в носки горчицу и не рисовали на груди йодную сеточку? Мы обсудили эффективность таких методов ... [5745 chars]',
+        url: 'https://74.ru/text/health/2025/09/21/76037027/',
+        image: 'https://74.ru/html-to-img/og/MNSZF57qFxyw2CHr4X7Gwg/article-id6561353-16x9.jpg?1758363118',
+        publishedAt: '2025-09-21T01:30:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: 'aef68f836288c1746237b1bc08c6bc58',
+        title: 'Трамп хочет вернуть авиабазу Bagram и пригрозил Афганистану',
+        description: 'Президент США Дональд Трамп заявил, что случятся плохие вещи, если Афганистан не вернет Штатам авиабазу Bagram.',
+        content: 'Президент США Дональд Трамп заявил, что случятся "плохие вещи", если Афганистан не вернет Штатам авиабазу Bagram.\n' +
+          'Источник: Трамп в своей соцсети Truth Social, "Радио Свобода"\n' +
+          'Прямая речь Трампа: "Если Афганистан не вернет авиабазу Bagram тем, кто ее... [1105 chars]',
+        url: 'https://www.pravda.com.ua/rus/news/2025/09/21/7531777/',
+        image: 'https://img.pravda.com/images/doc/7/5/7531777_fb_image_rus_2025_09_21_04_13_54.jpg',
+        publishedAt: '2025-09-21T01:08:56Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      },
+      {
+        id: 'ae93d9bd50190516336ef46103abd3ff',
+        title: 'Вучич заявил об "охоте" Запада из-за новостей о приезде Лаврова',
+        description: 'Западные страны сочли скандалом информацию о возможном приезде в Белград министра иностранных дел России Сергея Лаврова на военный парад 20 сентября. Об этом сообщил президент Сербии Александр Вучич, передает РБК',
+        content: 'Западные страны сочли скандалом информацию о возможном приезде в Белград министра иностранных дел России Сергея Лаврова на военный парад 20 сентября. Об этом сообщил президент Сербии Александр Вучич, передает РБК.\n' +
+          'По его словам, из-за незнания лидеро... [322 chars]',
+        url: 'https://tve24.ru/news/2025/09/21/vuchich-zayavil-ob-ohote-zapada-iz-za-novostey-o-priezde-lavrova/',
+        image: 'https://icdn.lenta.ru/images/2025/09/21/04/20250921040753801/share_ee636589bc3f931a5b39a239db5d0c37.jpg',
+        publishedAt: '2025-09-21T01:08:00Z',
+        lang: 'ru',
+        source: {
+          id: '6f1ead09126f1f4738a48957e22f789c',
+          name: 'РБК-Україна',
+          url: 'https://www.rbc.ua',
+          country: 'ua'
+        }
+      }
+    ]
+
+  };
+
+
+
+
+
+
+
+
+  function renderNewsApp() {
+    document.querySelector(".calendar-app").classList.remove("fade-out");
+    document.querySelector(".calendar-app").classList.add("fade-in");
+    document.querySelector(".events-container").classList.remove("weather-app");
+    function renderHeaderBtn() {
+      const header = document.createElement("div");
+      header.classList.add("header-right");
+      header.innerHTML = `
+            <div div class ="language-switcher" >
+                <button class="active">RU</button>
+                <button>EN</button>
+            </div >
+            <div class="menu-container">
+              <button class="menu-btn">Темы</button>
+              <div class="dropdown-content">
+                <a href="#">Общее</a>
+                <a href="#">Мир</a>
+                <a href="#">Страна</a>
+                <a href="#">Бизнес</a>
+                <a href="#">Технологии</a>
+                <a href="#">Развлечения</a>
+                <a href="#">Спорт</a>
+                <a href="#">Наука</a>
+                <a href="#">Здоровье</a>
+              </div>
+            </div>
+
+
+          `;
+      document.querySelector(".header").prepend(header);
+    };
+    renderHeaderBtn();
+
+
+    const main = document.createElement("main");
+    main.innerHTML = `
+              <h2 class="carousel-title" > Главные новости</h2 >
+              <div class="news-carousel">  
+              </div>`;
+    document.querySelector(".wraper-nav-cal").prepend(main);
+
+
+    const lastNewsTag = document.createElement("div");
+    lastNewsTag.innerHTML = `
+            <h2 class="carousel-title news-list-title" > Последние новости</h2 >
+              <div class="news-list">
+              </div>
+          `;
+    document.querySelector(".events-container").append(lastNewsTag);
+
+
+
+    class NewsCard {
+      constructor(title, description, url, image) {
+        this.title = title
+        this.description = description
+        this.image = image
+        this.url = url
+      }
+      renderCarusel() {
+        const carousel = document.createElement("div");
+        carousel.classList.add("news-card");
+        carousel.id = this.url;
+        carousel.innerHTML = `
+                  <img src=${this.image} alt=>
+                    <div class="card-content">
+                      <h3>${this.title}</h3>
+                      <p>${this.description}</p>
+                    </div>
+          `;
+        document.querySelector(".news-carousel").append(carousel);
+      }
+      renderLastNews() {
+        const lastNews = document.createElement("div");
+        lastNews.id = this.url;
+        lastNews.classList.add("news-item");
+        lastNews.innerHTML = `
+                  <img src=${this.image} alt="Изображение новости">
+                    <div class="item-content">
+                      <h4>${this.title}</h4>
+                      <p></p>
+                    </div>
+  `;
+        document.querySelector(".news-list").prepend(lastNews);
+      }
+    };
+
+    let apikey = '4544cbf01dd600064686b8125853d3c5';
+    let category = 'technology';
+    let url = 'https://gnews.io/api/v4/top-headlines?category=' + category + '&lang=ru&country=rus&max=10&apikey=' + apikey;
+
+    fetch(url)
+      .then(response => response.json())
+      .then((data) => {
+        carousel(data);
+        lastNews(data);
+      });
+
+
+
+    function carousel(responce) {
+      const articles = Object.values(responce.articles);
+      for (let value of articles) {
+        let { title, description, url, image } = value;
+        const cardNews = new NewsCard(title, description, url, image);
+        cardNews.renderCarusel();
+      }
+    };
+
+
+
+
+    function lastNews(responce) {
+      document.querySelector(".events-container").classList.add("mews-conteiner");
+      const articles = Object.values(responce.articles);
+      for (let value of articles) {
+        let { title, description, url, image } = value;
+        const cardNews = new NewsCard(title, description, url, image);
+        cardNews.renderLastNews();
+      };
+    };
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  });
